@@ -28,3 +28,27 @@ def get_distance_hav(lat0, lng0, lat1, lng1):
 # lon2, lat2 = (34.0522342, -118.2436849)  # 洛杉矶(11625.7KM)
 # d2 = get_distance_hav(lon1, lat1, lon2, lat2)
 # print(d2)
+
+from math import sin, asin, cos, radians, fabs, sqrt
+import numpy as np
+
+EARTH_RADIUS = 6371  # 地球平均半径，6371km
+
+
+def hav(theta):
+    s = np.sin(theta / 2)
+    return s * s
+
+
+def get_distance_hav(lat0, lng0, lat1, lng1):
+    "用haversine公式计算球面两点间的距离。"
+    # 经纬度转换成弧度
+    lat0 = np.radians(lat0)
+    lat1 = np.radians(lat1)
+    lng0 = np.radians(lng0)
+    lng1 = np.radians(lng1)
+    dlng = np.fabs(lng0 - lng1)
+    dlat = np.fabs(lat0 - lat1)
+    h = hav(dlat) + np.cos(lat0) * np.cos(lat1) * hav(dlng)
+    distance = 2 * EARTH_RADIUS * (np.arcsin(np.sqrt(h)))
+    return distance
